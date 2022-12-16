@@ -1,8 +1,11 @@
- package com.jingge.sensorcollect;
+package com.jingge.sensorcollect;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,8 +16,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -194,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    AccData[0] = event.values[0];
 //                    AccData[1] = event.values[1];
 //                    AccData[2] = event.values[2];
-                    AccData accData = new AccData(String.valueOf(event.timestamp), String.valueOf(event.values[0]),
+                    AccData accData = new AccData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
                             String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     accDataList.add(accData);
                     break;
@@ -205,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     tv_Temperature.setText(sb.toString());
 //                    TempData[0] = event.values[0];
 //                    saveData(TempData, event.timestamp, event.values[0]);
-                    TempData tempData = new TempData(String.valueOf(event.timestamp), String.valueOf(event.values[0]));
+                    TempData tempData = new TempData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]));
                     tempDataList.add(tempData);
                     break;
                 case Sensor.TYPE_GRAVITY:
@@ -221,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    GravityData[1] = event.values[1];
 //                    GravityData[2] = event.values[2];
 //                    saveData(GravityData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    GravityData gravityData = new GravityData(String.valueOf(event.timestamp),
+                    GravityData gravityData = new GravityData(String.valueOf(stampConvert(event.timestamp)),
                             String.valueOf(event.values[0]), String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     gravityDataList.add(gravityData);
                     break;
@@ -238,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    GyroData[1] = event.values[1];
 //                    GyroData[2] = event.values[2];
 //                    saveData(GyroData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    GyroData gyroData = new GyroData(String.valueOf(event.timestamp), String.valueOf(event.values[0]),
+                    GyroData gyroData = new GyroData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
                             String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     gyroDataList.add(gyroData);
                     break;
@@ -249,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     tv_Light.setText(sb.toString());
 //                    LightData[0] = event.values[0];
 //                    saveData(LightData, event.timestamp, event.values[0]);
-                    LightData lightData = new LightData(String.valueOf(event.timestamp), String.valueOf(event.values[0]));
+                    LightData lightData = new LightData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]));
                     lightDataList.add(lightData);
                     break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
@@ -265,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    MagneData[1] = event.values[1];
 //                    MagneData[2] = event.values[2];
 //                    saveData(MagneData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    MagneData magneData = new MagneData(String.valueOf(event.timestamp), String.valueOf(event.values[0]),
+                    MagneData magneData = new MagneData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
                             String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     magneDataList.add(magneData);
                     break;
@@ -282,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    OrientData[1] = event.values[1];
 //                    OrientData[2] = event.values[2];
 //                    saveData(OrientData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    OrientData orientData = new OrientData(String.valueOf(event.timestamp), String.valueOf(event.values[0]),
+                    OrientData orientData = new OrientData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
                             String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     orientDataList.add(orientData);
                     break;
@@ -293,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     tv_Pressure.setText(sb.toString());
 //                    PressData[0] = event.values[0];
 //                    saveData(PressData, event.timestamp, event.values[0]);
-                    PressData pressData = new PressData(String.valueOf(event.timestamp), String.valueOf(event.values[0]));
+                    PressData pressData = new PressData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]));
                     pressDataList.add(pressData);
                     break;
                 case Sensor.TYPE_PROXIMITY:
@@ -303,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     tv_Proximity.setText(sb.toString());
 //                    ProxData[0] = event.values[0];
 //                    saveData(ProxData, event.timestamp, event.values[0]);
-                    ProxData proxData = new ProxData(String.valueOf(event.timestamp), String.valueOf(event.values[0]));
+                    ProxData proxData = new ProxData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]));
                     proxDataList.add(proxData);
                     break;
                 case Sensor.TYPE_RELATIVE_HUMIDITY:
@@ -314,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     tv_RelativeHumidity.setText(sb.toString());
 //                    HumidData[0] = event.values[0];
 //                    saveData(HumidData, event.timestamp, event.values[0]);
-                    HumidData humidData = new HumidData(String.valueOf(event.timestamp), String.valueOf(event.values[0]));
+                    HumidData humidData = new HumidData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]));
                     humidDataList.add(humidData);
                     break;
                 case Sensor.TYPE_ROTATION_VECTOR:
@@ -332,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    RotationData[1] = event.values[1];
 //                    RotationData[2] = event.values[2];
 //                    saveData(RotationData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    RotationData rotationData = new RotationData(String.valueOf(event.timestamp), String.valueOf(event.values[0]),
+                    RotationData rotationData = new RotationData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
                             String.valueOf(event.values[1]), String.valueOf(event.values[2]), String.valueOf(event.values[3]));
                     rotationDataList.add(rotationData);
                     break;
@@ -348,6 +355,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LocationManager locationManager;
     private String filename = "";
     private EditText et_delay;
+    //定义用于保活的前台服务的intent
+    Intent foregroundService;
 
     //    private List<Sensor> tempSensors;
 
@@ -405,8 +414,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onStop() {
-        sensorManager.unregisterListener(listener);
-        locationManager.removeUpdates(mLocationListener);
+//        sensorManager.unregisterListener(listener);
+//        locationManager.removeUpdates(mLocationListener);
         super.onStop();
     }
 
@@ -421,6 +430,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_start:
+                //检查是否已关闭电池优化
+                ignoreBatteryOptimization(this);
+
                 //给文件名设置默认值
                 Date date = new Date();
                 @SuppressLint("SimpleDateFormat")
@@ -443,6 +455,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 et_filename.setEnabled(false);
                 startSensorListening();
 
+
+                //启动前台服务以保活
+                foregroundService = new Intent(this, SensorService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//8.0后才支持
+                    startForegroundService(foregroundService);
+                } else {
+                    startService(foregroundService);
+                }
+
                 break;
             case R.id.btn_stop:
                 stopSensorListening();
@@ -450,6 +471,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                String[] title = new String[]{"timestamp", "1", "2", "3"};
                 export();
                 et_filename.setEnabled(true);
+
+                //每次stop后，清除暂存区的数据
+                clearData();
+
+                //关闭用于前台保活的service
+                stopService(foregroundService);
+
                 break;
         }
     }
@@ -467,7 +495,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestPermissions();
 
         if (!et_delay.getText().toString().isEmpty()) {
-            SENSOR_DELAY = 1000000/(Integer.parseInt(et_delay.getText().toString()));
+            SENSOR_DELAY = 1000000 / (Integer.parseInt(et_delay.getText().toString()));
         }
 
         if (mAccelerometer != null) {
@@ -589,7 +617,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        //申请定位权限
+        //申请定位及后台运行权限
         XXPermissions.with(this)
                 .permission(Permission.ACCESS_FINE_LOCATION,
                         Permission.ACCESS_COARSE_LOCATION,
@@ -598,18 +626,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onGranted(List<String> permissions, boolean all) {
                 if (all) {
-                    ToastUtil.show(MainActivity.this, "获取定位权限成功");
+                    ToastUtil.show(MainActivity.this, "获取定位及后台运行权限成功");
                 }
             }
 
             @Override
             public void onDenied(List<String> permissions, boolean never) {
                 if (never) {
-                    ToastUtil.show(MainActivity.this, "被永久拒绝授权，请手动授予定位权限");
+                    ToastUtil.show(MainActivity.this, "被永久拒绝授权，请手动授予定位及后台运行权限");
                     // 如果是被永久拒绝就跳转到应用权限系统设置页面
                     XXPermissions.startPermissionActivity(MainActivity.this, permissions);
                 } else {
-                    ToastUtil.show(MainActivity.this, "获取定位权限失败");
+                    ToastUtil.show(MainActivity.this, "获取定位及后台运行权限失败");
                 }
             }
         });
@@ -617,7 +645,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //sensorEvent返回的timestamp需要转换为Unix时间戳
     private long stampConvert(long timestamp) {
-        long Unix_timestamp = (new Date()).getTime() + (timestamp - System.nanoTime()) / 1000000L;
+        long Unix_timestamp = (new Date()).getTime() + ((timestamp - System.nanoTime()) / 1000000L);
         return Unix_timestamp;
     }
 
@@ -644,4 +672,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ExcelExport.exportExcel(path, filename, RotationData.class, rotationDataList, MainActivity.this);
         ExcelExport.exportExcel(path, filename, TempData.class, tempDataList, MainActivity.this);
     }
+
+    //清除列表中暂存的数据
+    private void clearData() {
+        locationDataList.clear();
+        accDataList.clear();
+        gravityDataList.clear();
+        gyroDataList.clear();
+        humidDataList.clear();
+        lightDataList.clear();
+        magneDataList.clear();
+        orientDataList.clear();
+        pressDataList.clear();
+        proxDataList.clear();
+        rotationDataList.clear();
+        tempDataList.clear();
+    }
+
+
+    /**
+     * 忽略电池优化
+     */
+    public void ignoreBatteryOptimization(Activity activity) {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        boolean hasIgnored = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            hasIgnored = powerManager.isIgnoringBatteryOptimizations(activity.getPackageName());
+            //  判断当前APP是否有加入电池优化的白名单，如果没有，弹出加入电池优化的白名单的设置对话框。
+            if (!hasIgnored) {
+                try {//先调用系统显示 电池优化权限
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + activity.getPackageName()));
+                    startActivity(intent);
+                } catch (Exception e) {//如果失败了则引导用户到电池优化界面
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                        ComponentName cn = ComponentName.unflattenFromString("com.android.settings/.Settings$HighPowerApplicationsActivity");
+                        intent.setComponent(cn);
+                        startActivity(intent);
+                    } catch (Exception ex) {//如果全部失败则说明没有电池优化功能
+
+                    }
+                }
+            }
+        }
+    }
+
+
 }
