@@ -71,6 +71,14 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_Wifi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="暂无WIFI连接数据！"
+                android:padding="5dp"
+                android:textColorHint="@color/red" />
+
+            <TextView
                 android:id="@+id/tv_Location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package com.jingge.sensorcollect;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -82,7 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     List<ProxData> proxDataList = FileUtil.newArrayList();
     List<HumidData> humidDataList = FileUtil.newArrayList();
     List<RotationData> rotationDataList = FileUtil.newArrayList();
-
+    //定义用于保活的前台服务的intent
+    Intent foregroundService;
     //文件的存储地址
     private String path;
     //声明权限请求处理逻辑（已过时，使用框架申请权限）
@@ -355,8 +360,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LocationManager locationManager;
     private String filename = "";
     private EditText et_delay;
-    //定义用于保活的前台服务的intent
-    Intent foregroundService;
+    private TextView tv_Wifi;
 
     //    private List<Sensor> tempSensors;
 
@@ -388,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         et_delay = findViewById(R.id.et_delay);
         et_filename = findViewById(R.id.et_filename);
         tv_Path = findViewById(R.id.tv_Path);
+        tv_Wifi = findViewById(R.id.tv_Wifi);
         tv_Location = findViewById(R.id.tv_Location);
         tv_Accelerometer = findViewById(R.id.tv_Accelerometer);
         tv_Temperature = findViewById(R.id.tv_Temperature);
@@ -455,6 +460,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 et_filename.setEnabled(false);
                 startSensorListening();
 
+                //获取WIFI连接信息
+                tv_Wifi.setText("设备周边WIFI接入点信息："+ getWifiInfo());
 
                 //启动前台服务以保活
                 foregroundService = new Intent(this, SensorService.class);
@@ -580,11 +587,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //将数据存入数组的方法（已弃用）
-    private void saveData(float[] dataArray, float... data) {
-        for (int i = 0; i < data.length; i++) {
-            dataArray[i] = data[i];
-        }
-    }
+//    private void saveData(float[] dataArray, float... data) {
+//        for (int i = 0; i < data.length; i++) {
+//            dataArray[i] = data[i];
+//        }
+//    }
 
     //使用框架申请权限
     private void requestPermissions() {
@@ -720,5 +727,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    /**
+     * 获取当前设备WIFI环境信息
+     *
+     * @return 当前周围WIFI接入点信息
+     */
+    private String getWifiInfo() {
+        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        List<ScanResult> scanResults = wifiManager.getScanResults();
+        StringBuffer sb=new StringBuffer();
+        for (ScanResult scanResult : scanResults) {
+            sb.append("\n设备名："+scanResult.SSID
+                    +" 信号强度："+scanResult.level+"/n :"+wifiManager.calculateSignalLevel(scanResult.level,4));
+        }
+        return sb.toString();
+    }
 
 }
