@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">242传感器数据采集</string>
+
+    <string-array name="actions">
+        <item>上楼</item>
+        <item>下楼</item>
+        <item>走路</item>
+        <item>跑步</item>
+        <item>站立</item>
+        <item>坐立</item>
+        <item>打游戏</item>
+        <item>打电话</item>
+        <item>跳跃</item>
+    </string-array>
 </resources>
