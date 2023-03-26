@@ -28,9 +28,13 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -58,6 +62,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -361,6 +366,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String filename = "";
     private EditText et_delay;
     private TextView tv_Wifi;
+    //下拉选择动作类别的控件
+    private Spinner spinner_action;
+    //记录动作类别的参数
+    private int action_no;
+    private CheckBox check_Action;
 
     //    private List<Sensor> tempSensors;
 
@@ -405,6 +415,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_Proximity = findViewById(R.id.tv_Proximity);
         tv_RelativeHumidity = findViewById(R.id.tv_RelativeHumidity);
         tv_RotationVector = findViewById(R.id.tv_RotationVector);
+        spinner_action = findViewById(R.id.spinner_action);
+        check_Action = findViewById(R.id.check_action);
 
         Button btn_start = findViewById(R.id.btn_start);
         Button btn_stop = findViewById(R.id.btn_stop);
@@ -446,6 +458,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        String time = String.valueOf(System.currentTimeMillis());
                 et_filename.setText(time);
 
+                //获取动作下拉框选择的动作类型
+                spinner_action.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view,
+                                               int pos, long id) {
+
+                        String[] actions = getResources().getStringArray(R.array.actions);
+                        Toast.makeText(MainActivity.this, "你选择的动作类型是:" + actions[pos], Toast.LENGTH_LONG).show();
+                        if (check_Action.isChecked()) {
+                            action_no = pos + 1;
+                        }else {
+                            action_no = 0;
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // Another interface callback
+                    }
+                });
+
                 //获取存储文件名
                 filename = et_filename.getText().toString();
 
@@ -461,7 +494,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startSensorListening();
 
                 //获取WIFI连接信息
-                tv_Wifi.setText("设备周边WIFI接入点信息："+ getWifiInfo());
+                tv_Wifi.setText("设备周边WIFI接入点信息：" + getWifiInfo());
 
                 //启动前台服务以保活
                 foregroundService = new Intent(this, SensorService.class);
@@ -666,18 +699,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //数据导出为excel
     private void export() {
-        ExcelExport.exportExcel(path, filename, LocationData.class, locationDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, AccData.class, accDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, GravityData.class, gravityDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, GyroData.class, gyroDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, HumidData.class, humidDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, LightData.class, lightDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, MagneData.class, magneDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, OrientData.class, orientDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, PressData.class, pressDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, ProxData.class, proxDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, RotationData.class, rotationDataList, MainActivity.this);
-        ExcelExport.exportExcel(path, filename, TempData.class, tempDataList, MainActivity.this);
+        ExcelExport.exportExcel(path, filename, LocationData.class, locationDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, AccData.class, accDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, GravityData.class, gravityDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, GyroData.class, gyroDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, HumidData.class, humidDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, LightData.class, lightDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, MagneData.class, magneDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, OrientData.class, orientDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, PressData.class, pressDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, ProxData.class, proxDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, RotationData.class, rotationDataList, MainActivity.this, action_no);
+        ExcelExport.exportExcel(path, filename, TempData.class, tempDataList, MainActivity.this, action_no);
     }
 
     //清除列表中暂存的数据
@@ -737,10 +770,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         List<ScanResult> scanResults = wifiManager.getScanResults();
-        StringBuffer sb=new StringBuffer();
+        StringBuffer sb = new StringBuffer();
         for (ScanResult scanResult : scanResults) {
-            sb.append("\n设备名："+scanResult.SSID
-                    +" 信号强度："+scanResult.level+"/n :"+wifiManager.calculateSignalLevel(scanResult.level,4));
+            sb.append("\n设备名：" + scanResult.SSID
+                    + " 信号强度：" + scanResult.level + "/n :" + wifiManager.calculateSignalLevel(scanResult.level, 4));
         }
         return sb.toString();
     }

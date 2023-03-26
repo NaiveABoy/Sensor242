@@ -34,13 +34,14 @@
         android:orientation="horizontal">
 
         <CheckBox
+            android:id="@+id/check_action"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="自定义采集动作类型" />
+            android:text="采集动作类型（不选择则记录为0）" />
 
         <Spinner
-            android:id="@+id/spinner1"
+            android:id="@+id/spinner_action"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
