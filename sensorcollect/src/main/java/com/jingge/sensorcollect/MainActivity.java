@@ -54,6 +54,7 @@ import com.jingge.sensorcollect.pojo.PressData;
 import com.jingge.sensorcollect.pojo.ProxData;
 import com.jingge.sensorcollect.pojo.RotationData;
 import com.jingge.sensorcollect.pojo.TempData;
+import com.jingge.sensorcollect.util.CompressUtil;
 import com.jingge.sensorcollect.util.FileUtil;
 import com.jingge.sensorcollect.util.ToastUtil;
 
@@ -62,7 +63,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.prefs.PreferenceChangeEvent;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onSensorChanged(SensorEvent event) {
 
-            StringBuffer sb = new StringBuffer();
+            StringBuffer sb;
             switch (event.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
                     sb = new StringBuffer();
@@ -422,6 +422,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btn_stop = findViewById(R.id.btn_stop);
         btn_start.setOnClickListener(this);
         btn_stop.setOnClickListener(this);
+
+        //获取动作下拉框选择的动作类型
+        spinner_action.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+
+                String[] actions = getResources().getStringArray(R.array.actions);
+                Toast.makeText(MainActivity.this, "你选择的动作类型是:" + actions[pos], Toast.LENGTH_SHORT).show();
+                if (check_Action.isChecked()) {
+                    action_no = pos + 1;
+                } else {
+                    action_no = 0;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
     }
 
     @Override
@@ -458,26 +479,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        String time = String.valueOf(System.currentTimeMillis());
                 et_filename.setText(time);
 
-                //获取动作下拉框选择的动作类型
-                spinner_action.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view,
-                                               int pos, long id) {
 
-                        String[] actions = getResources().getStringArray(R.array.actions);
-                        Toast.makeText(MainActivity.this, "你选择的动作类型是:" + actions[pos], Toast.LENGTH_LONG).show();
-                        if (check_Action.isChecked()) {
-                            action_no = pos + 1;
-                        }else {
-                            action_no = 0;
-                        }
-                    }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        // Another interface callback
-                    }
-                });
 
                 //获取存储文件名
                 filename = et_filename.getText().toString();
@@ -509,7 +512,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 stopSensorListening();
                 locationManager.removeUpdates(mLocationListener);
 //                String[] title = new String[]{"timestamp", "1", "2", "3"};
-                export();
+                try {
+                    export();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 et_filename.setEnabled(true);
 
                 //每次stop后，清除暂存区的数据
@@ -698,7 +705,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //数据导出为excel
-    private void export() {
+    private void export() throws Exception {
         ExcelExport.exportExcel(path, filename, LocationData.class, locationDataList, MainActivity.this, action_no);
         ExcelExport.exportExcel(path, filename, AccData.class, accDataList, MainActivity.this, action_no);
         ExcelExport.exportExcel(path, filename, GravityData.class, gravityDataList, MainActivity.this, action_no);
@@ -711,6 +718,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ExcelExport.exportExcel(path, filename, ProxData.class, proxDataList, MainActivity.this, action_no);
         ExcelExport.exportExcel(path, filename, RotationData.class, rotationDataList, MainActivity.this, action_no);
         ExcelExport.exportExcel(path, filename, TempData.class, tempDataList, MainActivity.this, action_no);
+
+        //存储需要压缩的文件的路径
+        String filesToCompress = filePath(LocationData.class) + filePath(AccData.class) +
+                filePath(GravityData.class) + filePath(GyroData.class) + filePath(HumidData.class) +
+                filePath(LightData.class) + filePath(MagneData.class) + filePath(OrientData.class) +
+                filePath(PressData.class) + filePath(ProxData.class) + filePath(RotationData.class) +
+                filePath(TempData.class);
+        //将压缩文件打包
+        CompressUtil.zip(filesToCompress, path + File.separatorChar + filename + ".zip", null);
+    }
+
+    //定义一个方便函数以传回压缩需要文件路径
+    private String filePath(Class className) {
+        return path + File.separatorChar + filename + File.separatorChar + className.getSimpleName() + ".xlsx" + "|";
     }
 
     //清除列表中暂存的数据

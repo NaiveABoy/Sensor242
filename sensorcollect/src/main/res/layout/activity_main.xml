@@ -45,10 +45,33 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:entries="@array/actions" />
+            android:entries="@array/actions"/>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/check_upload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="上传至数据库（仍在开发中）"
+            android:enabled="false"/>
+
+        <EditText
+            android:id="@+id/et_user"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:text="角色名"
+            android:enabled="false"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_start"

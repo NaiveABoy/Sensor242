@@ -14,15 +14,15 @@ public class ExcelExport {
         String[] title;
         String sheetName = dataClass.getSimpleName();
 
-        //根据传感器类型获取文件存储子目录，若不存在则创建
-        path = path + File.separatorChar + sheetName;
+        //根据采集时间获取文件存储子目录，若不存在则创建
+        path = path + File.separatorChar + fileName;
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
         }
 
         //文件的真实存储路径
-        path = path + File.separatorChar + fileName + ".xlsx";
+        path = path + File.separatorChar + sheetName + ".xlsx";
 
         switch (sheetName) {
             case "LocationData":

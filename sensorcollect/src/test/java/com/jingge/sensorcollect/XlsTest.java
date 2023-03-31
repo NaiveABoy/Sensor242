@@ -19,7 +19,7 @@ public class XlsTest {
 
     @Test
     public void repeatedWrite() {
-        AccData accData = new AccData("1111", "2222", "3333", "4444");
+//        AccData accData = new AccData("1111", "2222", "3333", "4444");
 //        accDataList.add(accData);
 //        accDataList.add(accData);
 //        accDataList.add(accData);

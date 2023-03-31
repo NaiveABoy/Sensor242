@@ -95,7 +95,7 @@ public class ExcelUtil {
             //设置表格的名字
             WritableSheet sheet = workbook.createSheet(sheetName, 0);
             //创建标题栏
-            sheet.addCell((WritableCell) new Label(0, 0, filePath, arial14format));
+            sheet.addCell(new Label(0, 0, filePath, arial14format));
             for (int col = 0; col < colName.length; col++) {
                 sheet.addCell(new Label(col, 0, colName[col], arial10format));
             }
