@@ -479,9 +479,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        String time = String.valueOf(System.currentTimeMillis());
                 et_filename.setText(time);
 
-
-
-
                 //获取存储文件名
                 filename = et_filename.getText().toString();
 
@@ -791,7 +788,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         List<ScanResult> scanResults = wifiManager.getScanResults();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (ScanResult scanResult : scanResults) {
             sb.append("\n设备名：" + scanResult.SSID
                     + " 信号强度：" + scanResult.level + "/n :" + wifiManager.calculateSignalLevel(scanResult.level, 4));

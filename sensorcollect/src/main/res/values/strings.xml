@@ -11,5 +11,6 @@
         <item>打游戏</item>
         <item>打电话</item>
         <item>跳跃</item>
+        <item>其它</item>
     </string-array>
 </resources>

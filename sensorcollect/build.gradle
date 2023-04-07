@@ -40,13 +40,17 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:4.1.2'
     implementation 'org.apache.poi:poi:4.1.2'
     implementation 'org.apache.commons:commons-compress:1.23.0'
+    implementation 'com.alibaba:fastjson:2.0.26'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okio:okio:3.3.0'
+    implementation 'org.jsoup:jsoup:1.15.4'
 
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     testImplementation 'junit:junit:4.+'
     testImplementation 'org.slf4j:slf4j-simple:2.0.5'
-    testCompileOnly'org.projectlombok:lombok:1.18.24'
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
