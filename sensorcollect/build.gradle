@@ -9,6 +9,7 @@ android {
     defaultConfig {
         applicationId "com.jingge.sensorcollect"
         minSdkVersion 26
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

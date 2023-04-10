@@ -1,230 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="自定义采集频率（默认为50Hz）" />
-
-        <EditText
-            android:id="@+id/et_delay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="number"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/check_action"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="采集动作类型（不选择则记录为0）" />
-
-        <Spinner
-            android:id="@+id/spinner_action"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:entries="@array/actions"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/check_upload"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="上传至数据库（仍在开发中）"
-            android:enabled="false"/>
-
-        <EditText
-            android:id="@+id/et_user"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="text"
-            android:text="角色名"
-            android:enabled="false"/>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start" />
-
-    <Button
-        android:id="@+id/btn_stop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="stop" />
-
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="请输入文件名："
-        android:enabled="false"/>
-
-    <EditText
-        android:id="@+id/et_filename"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="默认文件名"/>
-
-    <TextView
-        android:id="@+id/tv_Path"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="保存路径将显示在这里"
-        android:textColor="@color/purple_700"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_Wifi"
+        <CheckBox
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="自定义采集频率（默认为50Hz）"/>
+
+        <EditText
+                android:id="@+id/et_delay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <CheckBox
+                android:id="@+id/check_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="采集动作类型（不选择则记录为0）"/>
+
+        <Spinner
+                android:id="@+id/spinner_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/actions"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <CheckBox
+                android:id="@+id/check_upload"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="上传至数据库（仍在开发中）"/>
+
+        <EditText
+                android:id="@+id/et_user"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:text="角色名"
+                android:enabled="false"/>
+
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start"/>
+
+    <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="stop"/>
+
+    <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="请输入文件名："
+            android:enabled="false"/>
+
+    <EditText
+            android:id="@+id/et_filename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="默认文件名"/>
+
+    <TextView
+            android:id="@+id/tv_Path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="保存路径将显示在这里"
+            android:textColor="@color/purple_700"/>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="暂无WIFI连接数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_Location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无位置信息数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Wifi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无WIFI连接数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_Accelerometer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无加速度传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无位置信息数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_Temperature"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无温度传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Accelerometer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无加速度传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_Gravity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无重力传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Temperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无温度传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_Gyro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无陀螺仪传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Gravity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无重力传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_Light"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无光强传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Gyro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无陀螺仪传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_MagneticField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无磁场传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Light"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无光强传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_Orientation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无方向传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_MagneticField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无磁场传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_Pressure"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无气压传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Orientation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无方向传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
+
+            <TextView
+                    android:id="@+id/tv_Pressure"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无气压传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="部分设备的接近传感器返回的是一个二进制值，即较大值为“远”、较小值为“近”"
-                android:textColor="@color/orange"
-                android:typeface="serif" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="部分设备的接近传感器返回的是一个二进制值，即较大值为“远”、较小值为“近”"
+                    android:textColor="@color/orange"
+                    android:typeface="serif"/>
 
             <TextView
-                android:id="@+id/tv_Proximity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无接近传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_Proximity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无接近传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_RelativeHumidity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无相对湿度传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_RelativeHumidity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无相对湿度传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
 
             <TextView
-                android:id="@+id/tv_RotationVector"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="暂无旋转矢量传感器数据！"
-                android:padding="5dp"
-                android:textColorHint="@color/red" />
+                    android:id="@+id/tv_RotationVector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="暂无旋转矢量传感器数据！"
+                    android:padding="5dp"
+                    android:textColorHint="@color/red"/>
         </LinearLayout>
 
     </ScrollView>

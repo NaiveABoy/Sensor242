@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -28,13 +29,7 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -79,8 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final float[] PressData = new float[4];
     private final float[] ProxData = new float[2];
     private final float[] HumidData = new float[2];
-    private final float[] RotationData = new float[5];*/
-    List<LocationData> locationDataList = FileUtil.newArrayList();
+    private final float[] RotationData = new float[5];*/ List<LocationData> locationDataList = FileUtil.newArrayList();
     List<AccData> accDataList = FileUtil.newArrayList();
     List<TempData> tempDataList = FileUtil.newArrayList();
     List<GravityData> gravityDataList = FileUtil.newArrayList();
@@ -165,8 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
             String time = sdf.format(timestamp);
 
-            String locations = String.format("位置信息:\n经度: %f， 纬度: %f， 海拔：%f，定位精度（米）：%f", longitude,
-                    latitude, altitude, accuracy) + "\n地址：" + getAddress(latitude, longitude) + "\n定位来源：" + provider + "\n定位时间：" + time;
+            String locations = String.format("位置信息:\n经度: %f， 纬度: %f， 海拔：%f，定位精度（米）：%f", longitude, latitude, altitude, accuracy) + "\n地址：" + getAddress(latitude, longitude) + "\n定位来源：" + provider + "\n定位时间：" + time;
             Log.d(TAG, locations);
 //            LocationData[0] = timestamp;
 //            LocationData[1] = (float) longitude;
@@ -174,9 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            LocationData[3] = (float) altitude;
 
 //            saveData(LocationData, (float) timestamp, (float) longitude, (float) latitude, (float) altitude);
-            LocationData locationData = new LocationData(String.valueOf(timestamp), String.valueOf(longitude),
-                    String.valueOf(latitude), String.valueOf(altitude),
-                    String.valueOf(accuracy), provider);
+            LocationData locationData = new LocationData(String.valueOf(timestamp), String.valueOf(longitude), String.valueOf(latitude), String.valueOf(altitude), String.valueOf(accuracy), provider);
             locationDataList.add(locationData);
 
             //更新位置信息
@@ -212,8 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    AccData[0] = event.values[0];
 //                    AccData[1] = event.values[1];
 //                    AccData[2] = event.values[2];
-                    AccData accData = new AccData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
-                            String.valueOf(event.values[1]), String.valueOf(event.values[2]));
+                    AccData accData = new AccData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]), String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     accDataList.add(accData);
                     break;
                 case Sensor.TYPE_AMBIENT_TEMPERATURE:
@@ -239,8 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    GravityData[1] = event.values[1];
 //                    GravityData[2] = event.values[2];
 //                    saveData(GravityData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    GravityData gravityData = new GravityData(String.valueOf(stampConvert(event.timestamp)),
-                            String.valueOf(event.values[0]), String.valueOf(event.values[1]), String.valueOf(event.values[2]));
+                    GravityData gravityData = new GravityData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]), String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     gravityDataList.add(gravityData);
                     break;
                 case Sensor.TYPE_GYROSCOPE:
@@ -256,8 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    GyroData[1] = event.values[1];
 //                    GyroData[2] = event.values[2];
 //                    saveData(GyroData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    GyroData gyroData = new GyroData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
-                            String.valueOf(event.values[1]), String.valueOf(event.values[2]));
+                    GyroData gyroData = new GyroData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]), String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     gyroDataList.add(gyroData);
                     break;
                 case Sensor.TYPE_LIGHT:
@@ -283,8 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    MagneData[1] = event.values[1];
 //                    MagneData[2] = event.values[2];
 //                    saveData(MagneData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    MagneData magneData = new MagneData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
-                            String.valueOf(event.values[1]), String.valueOf(event.values[2]));
+                    MagneData magneData = new MagneData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]), String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     magneDataList.add(magneData);
                     break;
                 case Sensor.TYPE_ORIENTATION:
@@ -300,8 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    OrientData[1] = event.values[1];
 //                    OrientData[2] = event.values[2];
 //                    saveData(OrientData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    OrientData orientData = new OrientData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
-                            String.valueOf(event.values[1]), String.valueOf(event.values[2]));
+                    OrientData orientData = new OrientData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]), String.valueOf(event.values[1]), String.valueOf(event.values[2]));
                     orientDataList.add(orientData);
                     break;
                 case Sensor.TYPE_PRESSURE:
@@ -350,8 +336,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    RotationData[1] = event.values[1];
 //                    RotationData[2] = event.values[2];
 //                    saveData(RotationData, event.timestamp, event.values[0], event.values[1], event.values[2]);
-                    RotationData rotationData = new RotationData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]),
-                            String.valueOf(event.values[1]), String.valueOf(event.values[2]), String.valueOf(event.values[3]));
+                    RotationData rotationData = new RotationData(String.valueOf(stampConvert(event.timestamp)), String.valueOf(event.values[0]), String.valueOf(event.values[1]), String.valueOf(event.values[2]), String.valueOf(event.values[3]));
                     rotationDataList.add(rotationData);
                     break;
 
@@ -428,12 +413,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_start.setOnClickListener(this);
         btn_stop.setOnClickListener(this);
 
+        //给上传数据库按钮注册监听器，设置数据库角色输入框的状态
+        check_Upload.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String userName = getSharedPreferences("242Collection", MODE_PRIVATE).getString("userName", "");
+            if (!userName.isEmpty()){
+                et_User.setText(userName);
+            }
+            et_User.setEnabled(isChecked);
+        });
+
         //获取动作下拉框选择的动作类型
         spinner_action.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 String[] actions = getResources().getStringArray(R.array.actions);
                 Toast.makeText(MainActivity.this, "你选择的动作类型是:" + actions[pos], Toast.LENGTH_SHORT).show();
                 if (check_Action.isChecked()) {
@@ -478,8 +470,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //给文件名设置默认值
                 Date date = new Date();
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
                 String time = "sensorlog_" + sdf.format(date);
 //        String time = String.valueOf(System.currentTimeMillis());
                 et_filename.setText(time);
@@ -510,6 +501,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 break;
+
             case R.id.btn_stop:
                 stopSensorListening();
                 locationManager.removeUpdates(mLocationListener);
@@ -607,14 +599,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (locationManager == null) {
             return;
         }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        locationManager
-                .requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 1, mLocationListener);
-        locationManager
-                .requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, mLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 1, mLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, mLocationListener);
     }
 
 
@@ -646,13 +635,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void requestPermissions() {
 
         //若已获取权限，则不重复申请
-        if (XXPermissions.isGranted(this, Permission.ACCESS_BACKGROUND_LOCATION, Permission.ACCESS_COARSE_LOCATION,
-                Permission.ACCESS_FINE_LOCATION, Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE)) {
+        if (XXPermissions.isGranted(this, Permission.ACCESS_BACKGROUND_LOCATION, Permission.ACCESS_COARSE_LOCATION, Permission.ACCESS_FINE_LOCATION, Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE)) {
             return;
         }
         //申请存储权限
-        XXPermissions.with(this)
-                .permission(Permission.Group.STORAGE).request(new OnPermissionCallback() {
+        XXPermissions.with(this).permission(Permission.Group.STORAGE).request(new OnPermissionCallback() {
 
             @Override
             public void onGranted(List<String> permissions, boolean all) {
@@ -674,10 +661,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         //申请定位及后台运行权限
-        XXPermissions.with(this)
-                .permission(Permission.ACCESS_FINE_LOCATION,
-                        Permission.ACCESS_COARSE_LOCATION,
-                        Permission.ACCESS_BACKGROUND_LOCATION).request(new OnPermissionCallback() {
+        XXPermissions.with(this).permission(Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION, Permission.ACCESS_BACKGROUND_LOCATION).request(new OnPermissionCallback() {
 
             @Override
             public void onGranted(List<String> permissions, boolean all) {
@@ -713,7 +697,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return res;
     }
 
-    //数据导出为excel
+    //数据导出为excel并上传（可选）、存储角色名（如指定）
     private void export() throws Exception {
         ExcelExport.exportExcel(path, filename, LocationData.class, locationDataList, MainActivity.this, action_no);
         ExcelExport.exportExcel(path, filename, AccData.class, accDataList, MainActivity.this, action_no);
@@ -729,16 +713,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ExcelExport.exportExcel(path, filename, TempData.class, tempDataList, MainActivity.this, action_no);
 
         //存储需要压缩的文件的路径
-        String filesToCompress = filePath(LocationData.class) + filePath(AccData.class) +
-                filePath(GravityData.class) + filePath(GyroData.class) + filePath(HumidData.class) +
-                filePath(LightData.class) + filePath(MagneData.class) + filePath(OrientData.class) +
-                filePath(PressData.class) + filePath(ProxData.class) + filePath(RotationData.class) +
-                filePath(TempData.class);
+        String filesToCompress = filePath(LocationData.class) + filePath(AccData.class) + filePath(GravityData.class) + filePath(GyroData.class) + filePath(HumidData.class) + filePath(LightData.class) + filePath(MagneData.class) + filePath(OrientData.class) + filePath(PressData.class) + filePath(ProxData.class) + filePath(RotationData.class) + filePath(TempData.class);
         //将压缩文件打包
         String zipPath = path + File.separatorChar + filename + ".zip";
         CompressUtil.zip(filesToCompress, zipPath, null);
+
         if (check_Upload.isChecked()) {
-            UploadUtil.UploadFile(zipPath, et_User.toString());
+            UploadUtil.UploadFile(zipPath, et_User.getText().toString());
+        }
+        if (et_User.isEnabled()){
+            SharedPreferences sp = getSharedPreferences("242Collection", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("userName",et_User.getText().toString());
+            editor.apply();
         }
     }
 
@@ -806,8 +793,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<ScanResult> scanResults = wifiManager.getScanResults();
         StringBuilder sb = new StringBuilder();
         for (ScanResult scanResult : scanResults) {
-            sb.append("\n设备名：" + scanResult.SSID
-                    + " 信号强度：" + scanResult.level + "/n :" + wifiManager.calculateSignalLevel(scanResult.level, 4));
+            sb.append("\n设备名：" + scanResult.SSID + " 信号强度：" + scanResult.level + "/n :" + wifiManager.calculateSignalLevel(scanResult.level, 4));
         }
         return sb.toString();
     }
