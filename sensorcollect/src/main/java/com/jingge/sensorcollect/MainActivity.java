@@ -57,6 +57,7 @@ import com.jingge.sensorcollect.pojo.TempData;
 import com.jingge.sensorcollect.util.CompressUtil;
 import com.jingge.sensorcollect.util.FileUtil;
 import com.jingge.sensorcollect.util.ToastUtil;
+import com.jingge.sensorcollect.util.UploadUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -371,6 +372,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //记录动作类别的参数
     private int action_no;
     private CheckBox check_Action;
+    private CheckBox check_Upload;
+    private TextView et_User;
 
     //    private List<Sensor> tempSensors;
 
@@ -417,6 +420,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_RotationVector = findViewById(R.id.tv_RotationVector);
         spinner_action = findViewById(R.id.spinner_action);
         check_Action = findViewById(R.id.check_action);
+        check_Upload = findViewById(R.id.check_upload);
+        et_User = findViewById(R.id.et_user);
 
         Button btn_start = findViewById(R.id.btn_start);
         Button btn_stop = findViewById(R.id.btn_stop);
@@ -509,11 +514,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 stopSensorListening();
                 locationManager.removeUpdates(mLocationListener);
 //                String[] title = new String[]{"timestamp", "1", "2", "3"};
-                try {
-                    export();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+                //使用多线程以提高性能
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            export();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 et_filename.setEnabled(true);
 
                 //每次stop后，清除暂存区的数据
@@ -723,7 +735,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 filePath(PressData.class) + filePath(ProxData.class) + filePath(RotationData.class) +
                 filePath(TempData.class);
         //将压缩文件打包
-        CompressUtil.zip(filesToCompress, path + File.separatorChar + filename + ".zip", null);
+        String zipPath = path + File.separatorChar + filename + ".zip";
+        CompressUtil.zip(filesToCompress, zipPath, null);
+        if (check_Upload.isChecked()) {
+            UploadUtil.UploadFile(zipPath, et_User.toString());
+        }
     }
 
     //定义一个方便函数以传回压缩需要文件路径
