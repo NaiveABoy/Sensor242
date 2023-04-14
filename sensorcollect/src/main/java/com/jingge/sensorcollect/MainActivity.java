@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //给上传数据库按钮注册监听器，设置数据库角色输入框的状态
         check_Upload.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String userName = getSharedPreferences("242Collection", MODE_PRIVATE).getString("userName", "");
-            if (!userName.isEmpty()){
+            if (!userName.isEmpty()) {
                 et_User.setText(userName);
             }
             et_User.setEnabled(isChecked);
@@ -719,12 +719,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CompressUtil.zip(filesToCompress, zipPath, null);
 
         if (check_Upload.isChecked()) {
-            UploadUtil.UploadFile(zipPath, et_User.getText().toString());
+            int i = 0;
+            i = UploadUtil.UploadFile(zipPath, et_User.getText().toString());
+            if (i == 0) {
+                ToastUtil.show(this,"上传失败，请手动查看文件");
+            }else {
+                ToastUtil.show(this,"上传成功！");
+            }
         }
-        if (et_User.isEnabled()){
+        if (et_User.isEnabled()) {
             SharedPreferences sp = getSharedPreferences("242Collection", MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
-            editor.putString("userName",et_User.getText().toString());
+            editor.putString("userName", et_User.getText().toString());
             editor.apply();
         }
     }
