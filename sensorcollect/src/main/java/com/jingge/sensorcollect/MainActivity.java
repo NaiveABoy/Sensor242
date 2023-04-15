@@ -507,17 +507,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 locationManager.removeUpdates(mLocationListener);
 //                String[] title = new String[]{"timestamp", "1", "2", "3"};
 
-                //使用多线程以提高性能
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            export();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                try {
+                    export();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 et_filename.setEnabled(true);
 
                 //每次stop后，清除暂存区的数据
@@ -719,13 +713,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CompressUtil.zip(filesToCompress, zipPath, null);
 
         if (check_Upload.isChecked()) {
-            int i = 0;
-            i = UploadUtil.UploadFile(zipPath, et_User.getText().toString());
-            if (i == 0) {
-                ToastUtil.show(this,"上传失败，请手动查看文件");
-            }else {
-                ToastUtil.show(this,"上传成功！");
-            }
+//            int i = 0;
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int i = UploadUtil.UploadFile(zipPath, et_User.getText().toString());
+                }
+            }).start();
+
+//            if (i == 0) {
+//                ToastUtil.show(this,"上传失败，请手动查看文件");
+//            }else {
+//                ToastUtil.show(this,"上传成功！");
+//            }
         }
         if (et_User.isEnabled()) {
             SharedPreferences sp = getSharedPreferences("242Collection", MODE_PRIVATE);
